@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @UIScope
 @SpringView
-public class ErrorView extends VerticalLayout implements View {
+public class StartView extends VerticalLayout implements View {
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -21,6 +21,7 @@ public class ErrorView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponent(new Label("Hello, this is the 'error view' loaded if no view is matched based on URL."));
+        addComponents(new Label("System for editing and displaying information of library books."),
+                new Label("Use the navigation menu to watch (edit) data."));
     }
 }

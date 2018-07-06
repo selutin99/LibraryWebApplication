@@ -1,5 +1,6 @@
-package com.example.demo;
+package com.example.demo.Entities.Author;
 
+import com.example.demo.Entities.Author.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -38,6 +39,11 @@ public class AuthorService {
     public void update(Author author) {
         jdbcTemplate.update("UPDATE author SET firstName=?, lastName=?, patronymic=? WHERE idAuthor=?",
                 author.getFirstName(), author.getLastName(), author.getPatronymic(), author.getId());
+    }
+
+    public void insert(Author author) {
+        jdbcTemplate.update("INSERT INTO author (firstName, lastName, patronymic) VALUES(?,?,?)",
+                author.getFirstName(),author.getLastName(),author.getPatronymic());
     }
 
 }

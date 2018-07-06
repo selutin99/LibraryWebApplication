@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.Entities.Author.AuthorView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinRequest;
@@ -12,9 +13,7 @@ import com.vaadin.ui.themes.ValoTheme;
 import org.vaadin.viritin.layouts.MHorizontalLayout;
 import org.vaadin.viritin.layouts.MVerticalLayout;
 
-/**
- * @author mstahv
- */
+
 @SpringUI
 @Theme("valo")
 public class MainUI extends UI {
@@ -23,7 +22,7 @@ public class MainUI extends UI {
 
     public MainUI( MainViewDisplay mainContent, SpringNavigator navigator) {
         this.mainContent = mainContent;
-        navigator.setErrorView(ErrorView.class);
+        navigator.setErrorView(StartView.class);
     }
 
     @Override
@@ -39,7 +38,7 @@ public class MainUI extends UI {
 
     private Component createNavigationBar() {
         MVerticalLayout m = new MVerticalLayout().withWidth("300px");
-        m.addComponent(createNavButton("First", FirstView.class));
+        m.addComponent(createNavButton("List of Authors", AuthorView.class));
         m.addComponent(createNavButton("Second", SecondView.class));
         return m;
     }
@@ -51,7 +50,5 @@ public class MainUI extends UI {
         button.addStyleName(ValoTheme.BUTTON_LINK);
         return button;
     }
-
-
 
 }

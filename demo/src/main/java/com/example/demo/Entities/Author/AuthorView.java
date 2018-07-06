@@ -1,5 +1,7 @@
-package com.example.demo;
+package com.example.demo.Entities.Author;
 
+import com.example.demo.Entities.Author.Author;
+import com.example.demo.Entities.Author.AuthorService;
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -12,7 +14,9 @@ import java.util.List;
 
 
 @SpringView
-public class FirstView extends VerticalLayout implements View {
+public class AuthorView extends VerticalLayout implements View {
+
+    private boolean addOrUpdateFlag = false;
 
     @Autowired
     private AuthorService service;
@@ -26,9 +30,9 @@ public class FirstView extends VerticalLayout implements View {
     private TextField lastName = new TextField("Last name");
     private TextField patronymic = new TextField("Patronymic");
 
-    private TextField filterText = new TextField("Filter by name");
+    private Button add = new Button("Add", e -> insertForm());
 
-    private Button save = new Button("Save", e -> saveCustomer());
+    private Button save = new Button("OK", e -> saveCustomer());
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -36,6 +40,7 @@ public class FirstView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
+        HorizontalLayout horizontalLayout = new HorizontalLayout();
 
         updateGrid();
 
@@ -44,7 +49,9 @@ public class FirstView extends VerticalLayout implements View {
 
         binder.bindInstanceFields(this);
 
-        addComponents(grid, firstName, lastName, patronymic, save);
+        horizontalLayout.addComponents(grid,add);
+
+        addComponents(horizontalLayout, firstName, lastName, patronymic, save);
     }
 
     private void updateGrid() {
@@ -54,6 +61,8 @@ public class FirstView extends VerticalLayout implements View {
     }
 
     private void updateForm() {
+        addOrUpdateFlag = true;
+
         if (grid.asSingleSelect().isEmpty()) {
             setFormVisible(false);
         } else {
@@ -61,6 +70,22 @@ public class FirstView extends VerticalLayout implements View {
             binder.setBean(author);
             setFormVisible(true);
         }
+    }
+
+    private void insertForm() {
+        addOrUpdateFlag = false;
+
+        firstName.clear();
+        lastName.clear();
+        patronymic.clear();
+
+        if(grid.getSelectedItems()!=null){
+            grid.deselectAll();
+        }
+        setFormVisible(true);
+
+        author = new Author(firstName.getValue(), lastName.getValue(), patronymic.getValue());
+        binder.setBean(author);
     }
 
     private void setFormVisible(boolean visible) {
@@ -71,7 +96,12 @@ public class FirstView extends VerticalLayout implements View {
     }
 
     private void saveCustomer() {
-        service.update(author);
+        if(addOrUpdateFlag){
+            service.update(author);
+        }
+        else {
+            service.insert(author);
+        }
         updateGrid();
     }
 }

@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.demo.Entities.Author;
 
 public class Author {
 
@@ -8,6 +8,12 @@ public class Author {
 
     public Author(Long id, String firstName, String lastName, String patronymic) {
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.patronymic = patronymic;
+    }
+
+    public Author(String firstName, String lastName, String patronymic) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.patronymic = patronymic;
