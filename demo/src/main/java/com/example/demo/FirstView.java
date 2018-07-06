@@ -1,16 +1,18 @@
 package com.example.demo;
 
 import com.vaadin.data.Binder;
-import com.vaadin.server.VaadinRequest;
-import com.vaadin.shared.ui.ValueChangeMode;
-import com.vaadin.spring.annotation.SpringUI;
+import com.vaadin.navigator.View;
+import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
-@SpringUI
-public class VaadinUI extends UI {
+
+@SpringView
+public class FirstView extends VerticalLayout implements View {
 
     @Autowired
     private AuthorService service;
@@ -29,29 +31,25 @@ public class VaadinUI extends UI {
     private Button save = new Button("Save", e -> saveCustomer());
 
     @Override
-    protected void init(VaadinRequest request) {
-        updateGrid();
-        grid.setColumns("firstName", "lastName","patronymic");
-        grid.addSelectionListener(e -> updateForm());
+    public void enter(ViewChangeListener.ViewChangeEvent event) {
+    }
 
-        filterText.addValueChangeListener(e->updateGridFilter());
-        filterText.setValueChangeMode(ValueChangeMode.LAZY);
+    @PostConstruct
+    void init() {
+
+        updateGrid();
+
+        grid.addSelectionListener(e -> updateForm());
+        grid.setColumns("firstName", "lastName","patronymic");
 
         binder.bindInstanceFields(this);
 
-        VerticalLayout layout = new VerticalLayout(filterText, grid, firstName, lastName, patronymic, save);
-        setContent(layout);
-    }
-
-    private void updateGridFilter() {
-        List<Author> customers = service.findAll(filterText.getValue());
-        grid.setItems(customers);
-        setFormVisible(false);
+        addComponents(grid, firstName, lastName, patronymic, save);
     }
 
     private void updateGrid() {
-        List<Author> customers = service.findAll();
-        grid.setItems(customers);
+        List<Author> authors = service.findAll();
+        grid.setItems(authors);
         setFormVisible(false);
     }
 
