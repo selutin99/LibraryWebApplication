@@ -45,5 +45,4 @@ public class Author {
         this.patronymic = patronymic;
     }
 
-
 }

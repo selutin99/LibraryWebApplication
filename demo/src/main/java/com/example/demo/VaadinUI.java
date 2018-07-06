@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.vaadin.data.Binder;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.spring.annotation.SpringUI;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,13 @@ public class VaadinUI extends UI {
 
     private Grid<Author> grid = new Grid(Author.class);
 
-    private TextField firstName = new TextField("Имя");
-    private TextField lastName = new TextField("Фамилия");
-    private TextField patronymic = new TextField("Отчество");
+    private TextField firstName = new TextField("First name");
+    private TextField lastName = new TextField("Last name");
+    private TextField patronymic = new TextField("Patronymic");
 
-    private Button save = new Button("Сохранить", e -> saveCustomer());
+    private TextField filterText = new TextField("Filter by name");
+
+    private Button save = new Button("Save", e -> saveCustomer());
 
     @Override
     protected void init(VaadinRequest request) {
@@ -31,10 +34,19 @@ public class VaadinUI extends UI {
         grid.setColumns("firstName", "lastName","patronymic");
         grid.addSelectionListener(e -> updateForm());
 
+        filterText.addValueChangeListener(e->updateGridFilter());
+        filterText.setValueChangeMode(ValueChangeMode.LAZY);
+
         binder.bindInstanceFields(this);
 
-        VerticalLayout layout = new VerticalLayout(grid, firstName, lastName, patronymic, save);
+        VerticalLayout layout = new VerticalLayout(filterText, grid, firstName, lastName, patronymic, save);
         setContent(layout);
+    }
+
+    private void updateGridFilter() {
+        List<Author> customers = service.findAll(filterText.getValue());
+        grid.setItems(customers);
+        setFormVisible(false);
     }
 
     private void updateGrid() {
