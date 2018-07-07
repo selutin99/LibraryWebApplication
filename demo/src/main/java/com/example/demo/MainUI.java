@@ -38,8 +38,8 @@ public class MainUI extends UI {
 
     private Component createNavigationBar() {
         MVerticalLayout m = new MVerticalLayout().withWidth("300px");
-        m.addComponent(createNavButton("List of Authors", AuthorView.class));
-        m.addComponent(createNavButton("Second", SecondView.class));
+        m.addComponent(createNavButton("Список авторов", AuthorView.class));
+        m.addComponent(createNavButton("Второй", SecondView.class));
         return m;
     }
 

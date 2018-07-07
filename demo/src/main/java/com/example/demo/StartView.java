@@ -21,7 +21,7 @@ public class StartView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        addComponents(new Label("System for editing and displaying information of library books."),
-                new Label("Use the navigation menu to watch (edit) data."));
+        addComponents(new Label("Система ввода и отображения информации о книгах библиотеки."),
+                new Label("Воспользуйтесь навигационным меню для просмотра (изменения) информации."));
     }
 }

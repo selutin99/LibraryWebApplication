@@ -26,13 +26,15 @@ public class AuthorView extends VerticalLayout implements View {
 
     private Grid<Author> grid = new Grid(Author.class);
 
-    private TextField firstName = new TextField("First name");
-    private TextField lastName = new TextField("Last name");
-    private TextField patronymic = new TextField("Patronymic");
+    private TextField firstName = new TextField("Имя");
+    private TextField lastName = new TextField("Фамилия");
+    private TextField patronymic = new TextField("Отчество");
 
-    private Button add = new Button("Add", e -> insertForm());
+    private Button add = new Button("Добавить", e -> insertForm());
+    private Button delete = new Button("Удалить", e-> deleteForm());
 
     private Button save = new Button("OK", e -> saveCustomer());
+    private Button cancel = new Button("Отменить", e-> setFormVisible(false));
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
@@ -40,18 +42,26 @@ public class AuthorView extends VerticalLayout implements View {
 
     @PostConstruct
     void init() {
-        HorizontalLayout horizontalLayout = new HorizontalLayout();
+        HorizontalLayout hl1 = new HorizontalLayout();
+        HorizontalLayout hl2 = new HorizontalLayout();
+
+        VerticalLayout vl = new VerticalLayout();
+
+        delete.setEnabled(false);
 
         updateGrid();
 
         grid.addSelectionListener(e -> updateForm());
-        grid.setColumns("firstName", "lastName","patronymic");
+        grid.setColumns("firstName", "lastName", "patronymic");
 
         binder.bindInstanceFields(this);
 
-        horizontalLayout.addComponents(grid,add);
+        vl.addComponents(add,delete);
+        hl1.addComponents(grid,vl);
 
-        addComponents(horizontalLayout, firstName, lastName, patronymic, save);
+        hl2.addComponents(save,cancel);
+
+        addComponents(hl1, firstName, lastName, patronymic, hl2);
     }
 
     private void updateGrid() {
@@ -66,6 +76,7 @@ public class AuthorView extends VerticalLayout implements View {
         if (grid.asSingleSelect().isEmpty()) {
             setFormVisible(false);
         } else {
+            delete.setEnabled(true);
             author = grid.asSingleSelect().getValue();
             binder.setBean(author);
             setFormVisible(true);
@@ -79,8 +90,8 @@ public class AuthorView extends VerticalLayout implements View {
         lastName.clear();
         patronymic.clear();
 
-        if(grid.getSelectedItems()!=null){
-            grid.deselectAll();
+        if(!grid.asSingleSelect().isEmpty()){
+            grid.select(null);
         }
         setFormVisible(true);
 
@@ -88,11 +99,28 @@ public class AuthorView extends VerticalLayout implements View {
         binder.setBean(author);
     }
 
+    private void deleteForm() {
+        if (grid.asSingleSelect().isEmpty()) {
+            delete.setEnabled(false);
+        }
+        else{
+            author = grid.asSingleSelect().getValue();
+            binder.setBean(author);
+            service.delete(author);
+        }
+        updateGrid();
+    }
+
     private void setFormVisible(boolean visible) {
+        if(!visible){
+            grid.deselectAll();
+            delete.setEnabled(false);
+        }
         firstName.setVisible(visible);
         lastName.setVisible(visible);
         patronymic.setVisible(visible);
         save.setVisible(visible);
+        cancel.setVisible(visible);
     }
 
     private void saveCustomer() {
