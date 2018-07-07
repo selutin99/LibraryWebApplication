@@ -13,28 +13,79 @@ public class BookService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public List<Author> findAll() {
-        return jdbcTemplate.query("SELECT idAuthor, firstName, lastName, patronymic FROM author",
-                (rs, rowNum) -> new Author(
-                        rs.getLong("idAuthor"),
-                        rs.getString("firstName"),
-                        rs.getString("lastName"),
-                        rs.getString("patronymic")
+
+    public List<Book> findAll() {
+        return jdbcTemplate.query("SELECT idBook, title, bookAuthor, bookGenre, publisher, year, city FROM book",
+                (rs, rowNum) -> new Book(
+                        rs.getLong("idBook"),
+                        rs.getString("title"),
+                        rs.getString("bookAuthor"),
+                        rs.getString("bookGenre"),
+                        rs.getString("publisher"),
+                        rs.getString("year"),
+                        rs.getString("city")
                 )
         );
     }
 
-    public void update(Author author) {
-        jdbcTemplate.update("UPDATE author SET firstName=?, lastName=?, patronymic=? WHERE idAuthor=?",
-                author.getFirstName(), author.getLastName(), author.getPatronymic(), author.getId());
+    public List<Book> findAllByName(String value) {
+        return jdbcTemplate.query("SELECT idBook, title, bookAuthor, bookGenre, publisher, year, city " +
+                        "FROM book WHERE title LIKE '%"+value+"%'",
+                (rs, rowNum) -> new Book(
+                        rs.getLong("idBook"),
+                        rs.getString("title"),
+                        rs.getString("bookAuthor"),
+                        rs.getString("bookGenre"),
+                        rs.getString("publisher"),
+                        rs.getString("year"),
+                        rs.getString("city")
+                )
+        );
     }
 
-    public void insert(Author author) {
-        jdbcTemplate.update("INSERT INTO author (firstName, lastName, patronymic) VALUES(?,?,?)",
-                author.getFirstName(),author.getLastName(),author.getPatronymic());
+    public List<Book> findAllByPublisher(String value) {
+        return jdbcTemplate.query("SELECT idBook, title, bookAuthor, bookGenre, publisher, year, city " +
+                        "FROM book WHERE publisher LIKE '%"+value+"%'",
+                (rs, rowNum) -> new Book(
+                        rs.getLong("idBook"),
+                        rs.getString("title"),
+                        rs.getString("bookAuthor"),
+                        rs.getString("bookGenre"),
+                        rs.getString("publisher"),
+                        rs.getString("year"),
+                        rs.getString("city")
+                )
+        );
     }
 
-    public void delete(Author author) {
-        jdbcTemplate.update("DELETE FROM author WHERE idAuthor=?", author.getId());
+    public List<Book> findAllByAuthor(String value) {
+        return jdbcTemplate.query("SELECT idBook, title, bookAuthor, bookGenre, publisher, year, city " +
+                        "FROM book WHERE bookAuthor LIKE '%"+value+"%'",
+                (rs, rowNum) -> new Book(
+                        rs.getLong("idBook"),
+                        rs.getString("title"),
+                        rs.getString("bookAuthor"),
+                        rs.getString("bookGenre"),
+                        rs.getString("publisher"),
+                        rs.getString("year"),
+                        rs.getString("city")
+                )
+        );
+    }
+
+    public void update(Book book) {
+        jdbcTemplate.update("UPDATE book SET " +
+                        "title=?, bookAuthor=?, bookGenre=?, publisher=?, year=?, city=?  " +
+                        "WHERE idAuthor=?",
+                book.getTitle(), book.getBookAuthor(), book.getBookGenre(), book.getPublisher(), book.getYear(), book.getCity());
+    }
+
+    public void insert(Book book) {
+        jdbcTemplate.update("INSERT INTO book (title, bookAuthor, bookGenre, publisher, year, city) VALUES(?,?,?,?,?,?)",
+                book.getTitle(),book.getBookAuthor(),book.getBookGenre(),book.getPublisher(),book.getYear(),book.getCity());
+    }
+
+    public void delete(Book book) {
+        jdbcTemplate.update("DELETE FROM book WHERE idBook=?", book.getId());
     }
 }

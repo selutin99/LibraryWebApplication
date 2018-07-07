@@ -4,12 +4,12 @@ public class Book {
     private Long id;
 
     private String title;
-    private int bookAuthor, bookGenre;
+    private String bookAuthor, bookGenre;
     private String publisher;
-    private int year;
+    private String year;
     private String city;
 
-    public Book(Long id, String title, int bookAuthor, int bookGenre, String publisher, int year, String city) {
+    public Book(Long id, String title, String bookAuthor, String bookGenre, String publisher, String year, String city) {
         this.id = id;
         this.title = title;
         this.bookAuthor = bookAuthor;
@@ -19,7 +19,7 @@ public class Book {
         this.city = city;
     }
 
-    public Book(String title, int bookAuthor, int bookGenre, String publisher, int year, String city) {
+    public Book(String title, String bookAuthor, String bookGenre, String publisher, String year, String city) {
         this.title = title;
         this.bookAuthor = bookAuthor;
         this.bookGenre = bookGenre;
@@ -40,17 +40,17 @@ public class Book {
     }
     public void setTitle(String title) { this.title = title; }
 
-    public int getBookAuthor() {
+    public String getBookAuthor() {
         return bookAuthor;
     }
-    public void setBookAuthor(int bookAuthor) {
+    public void setBookAuthor(String bookAuthor) {
         this.bookAuthor = bookAuthor;
     }
 
-    public int getBookGenre() {
+    public String getBookGenre() {
         return bookGenre;
     }
-    public void setBookGenre(int bookGenre) {
+    public void setBookGenre(String bookGenre) {
         this.bookGenre = bookGenre;
     }
 
@@ -59,10 +59,10 @@ public class Book {
     }
     public void setPublisher(String publisher) { this.publisher = publisher; }
 
-    public int getYear() {
+    public String getYear() {
         return year;
     }
-    public void setYear(int year) {
+    public void setYear(String year) {
         this.year = year;
     }
 

@@ -3,11 +3,16 @@ package com.example.demo.Entities.Book;
 import com.example.demo.Entities.Author.Author;
 import com.example.demo.Entities.Author.AuthorService;
 import com.vaadin.data.Binder;
+import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
+import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
+import javafx.scene.control.RadioButton;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -38,6 +43,11 @@ public class BookView extends VerticalLayout implements View {
     private Button save = new Button("OK", e -> saveAuthor());
     private Button cancel = new Button("Отменить", e-> setFormVisible(false));
 
+    private TextField filter = new TextField();
+    private Button clearFilterTextBtn = new Button(VaadinIcons.CLOSE);
+
+    private RadioButtonGroup<String> group = new RadioButtonGroup<>();
+
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent event) {
     }
@@ -46,11 +56,49 @@ public class BookView extends VerticalLayout implements View {
     void init() {
         HorizontalLayout hl1 = new HorizontalLayout();
         HorizontalLayout hl2 = new HorizontalLayout();
+
+        HorizontalLayout hlForRadioButton = new HorizontalLayout();
+
+        VerticalLayout vlForButton1 = new VerticalLayout();
+        VerticalLayout vlForButton2 = new VerticalLayout();
+        HorizontalLayout hlForButton =  new HorizontalLayout();
+
+        vlForButton1.addComponents(title,bookAuthor,bookGenre);
+        vlForButton2.addComponents(publisher,year,city);
+
+        hlForButton.addComponents(vlForButton1,vlForButton2);
+
+        group.setItems("По имени", "По автору", "По издательству");
+        group.setSelectedItem("По имени");
+        group.addValueChangeListener(e-> {
+            switch (e.getValue()) {
+                case "По имени":
+                    chooseFilter(1);
+                    break;
+                case "По автору":
+                    chooseFilter(2);
+                    break;
+                case "По издательству":
+                    chooseFilter(3);
+                    break;
+                default:
+                    chooseFilter(1);
+            }
+        });
+        filter.setPlaceholder("Фильтрация записей");
+        hlForRadioButton.addComponents(group);
+
         VerticalLayout vl = new VerticalLayout();
 
         updateGrid();
 
         delete.setEnabled(false);
+
+        filter.addValueChangeListener(e->updateGridFilterName());
+        filter.setValueChangeMode(ValueChangeMode.LAZY);
+
+        clearFilterTextBtn.addClickListener(e -> filter.clear());
+
         grid.addSelectionListener(e -> updateForm());
         grid.setColumns("title", "bookAuthor", "bookGenre", "publisher", "year", "city");
 
@@ -59,13 +107,54 @@ public class BookView extends VerticalLayout implements View {
         vl.addComponents(add,delete);
         hl1.addComponents(grid,vl);
         hl2.addComponents(save,cancel);
-        addComponents(hl1, title, bookAuthor, bookGenre, publisher, year, city, hl2);
+
+        vlForButton1.addComponent(hl2);
+
+        CssLayout filtering = new CssLayout();
+        filtering.addComponents(filter, clearFilterTextBtn);
+        filtering.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+
+        addComponents(filtering, hlForRadioButton, hl1, hlForButton);
     }
 
     private void updateGrid() {
         List<Book> books = service.findAll();
         grid.setItems(books);
         setFormVisible(false);
+    }
+
+    private void updateGridFilterName() {
+        List<Book> books = service.findAllByName(filter.getValue());
+        grid.setItems(books);
+        setFormVisible(false);
+    }
+
+    private void updateGridFilterPublisher() {
+        List<Book> books = service.findAllByPublisher(filter.getValue());
+        grid.setItems(books);
+        setFormVisible(false);
+    }
+
+    private void updateGridFilterAuthor() {
+        List<Book> books = service.findAllByAuthor(filter.getValue());
+        grid.setItems(books);
+        setFormVisible(false);
+    }
+
+    private void chooseFilter(int id){
+        switch (id){
+            case 1:
+                filter.addValueChangeListener(e->updateGridFilterName());
+                break;
+            case 2:
+                filter.addValueChangeListener(e->updateGridFilterAuthor());
+                break;
+            case 3:
+                filter.addValueChangeListener(e->updateGridFilterPublisher());
+                break;
+            default:
+                filter.addValueChangeListener(e->updateGridFilterName());
+        }
     }
 
     private void updateForm() {
@@ -96,7 +185,7 @@ public class BookView extends VerticalLayout implements View {
         }
         setFormVisible(true);
 
-        book = new Book(title.getValue(), Integer.parseInt(bookAuthor.getValue()), Integer.parseInt(bookGenre.getValue()), publisher.getValue(), Integer.parseInt(year.getValue()), city.getValue());
+        book = new Book(title.getValue(), bookAuthor.getValue(), bookGenre.getValue(), publisher.getValue(), year.getValue(), city.getValue());
         binder.setBean(book);
     }
 
@@ -129,11 +218,21 @@ public class BookView extends VerticalLayout implements View {
     }
 
     private void saveAuthor() {
+        switch (publisher.getValue()){
+            case "Москва":
+                break;
+            case "Питер":
+                break;
+            case "Oreily":
+                break;
+            default:
+                return;
+        }
         if(addOrUpdateFlag){
-            service.update(author);
+            service.update(book);
         }
         else {
-            service.insert(author);
+            service.insert(book);
         }
         updateGrid();
     }

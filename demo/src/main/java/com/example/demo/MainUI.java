@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.Entities.Author.AuthorView;
+import com.example.demo.Entities.Book.BookView;
 import com.example.demo.Entities.Genre.GenreView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
@@ -41,13 +42,14 @@ public class MainUI extends UI {
         MVerticalLayout m = new MVerticalLayout().withWidth("300px");
         m.addComponent(createNavButton("Список авторов", AuthorView.class));
         m.addComponent(createNavButton("Список жанров", GenreView.class));
+        m.addComponent(createNavButton("Список книг", BookView.class));
         return m;
     }
 
     private Component createNavButton(String first, Class<? extends View> aClass) {
         Button button = new Button(first);
         button.addClickListener(e->getNavigator().navigateTo(aClass.getSimpleName().replaceAll("View", "").toLowerCase()));
-        button.addStyleName(ValoTheme.BUTTON_LARGE);
+        button.addStyleName(ValoTheme.BUTTON_BORDERLESS_COLORED);
         button.addStyleName(ValoTheme.BUTTON_LINK);
         return button;
     }
