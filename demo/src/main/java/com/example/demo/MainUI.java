@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.Entities.Author.AuthorView;
+import com.example.demo.Entities.Genre.GenreView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinRequest;
@@ -39,7 +40,7 @@ public class MainUI extends UI {
     private Component createNavigationBar() {
         MVerticalLayout m = new MVerticalLayout().withWidth("300px");
         m.addComponent(createNavButton("Список авторов", AuthorView.class));
-        m.addComponent(createNavButton("Второй", SecondView.class));
+        m.addComponent(createNavButton("Список жанров", GenreView.class));
         return m;
     }
 

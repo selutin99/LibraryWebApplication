@@ -1,5 +1,7 @@
-package com.example.demo.Entities.Author;
+package com.example.demo.Entities.Book;
 
+import com.example.demo.Entities.Author.Author;
+import com.example.demo.Entities.Author.AuthorService;
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
@@ -10,23 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-
 @SpringView
-public class AuthorView extends VerticalLayout implements View {
+public class BookView extends VerticalLayout implements View {
 
     private boolean addOrUpdateFlag = false;
 
     @Autowired
-    private AuthorService service;
+    private BookService service;
 
-    private Author author;
-    private Binder<Author> binder = new Binder<>(Author.class);
+    private Book book;
+    private Binder<Book> binder = new Binder<>(Book.class);
 
-    private Grid<Author> grid = new Grid(Author.class);
+    private Grid<Book> grid = new Grid(Book.class);
 
-    private TextField firstName = new TextField("Имя");
-    private TextField lastName = new TextField("Фамилия");
-    private TextField patronymic = new TextField("Отчество");
+    private TextField title = new TextField("Название");
+    private TextField bookAuthor = new TextField("Автор книги");
+    private TextField bookGenre = new TextField("Жанр книги");
+    private TextField publisher = new TextField("Издательство");
+    private TextField year = new TextField("Год");
+    private TextField city = new TextField("Город");
 
     private Button add = new Button("Добавить", e -> insertForm());
     private Button delete = new Button("Удалить", e-> deleteForm());
@@ -48,19 +52,19 @@ public class AuthorView extends VerticalLayout implements View {
 
         delete.setEnabled(false);
         grid.addSelectionListener(e -> updateForm());
-        grid.setColumns("firstName", "lastName", "patronymic");
+        grid.setColumns("title", "bookAuthor", "bookGenre", "publisher", "year", "city");
 
         binder.bindInstanceFields(this);
 
         vl.addComponents(add,delete);
         hl1.addComponents(grid,vl);
         hl2.addComponents(save,cancel);
-        addComponents(hl1, firstName, lastName, patronymic, hl2);
+        addComponents(hl1, title, bookAuthor, bookGenre, publisher, year, city, hl2);
     }
 
     private void updateGrid() {
-        List<Author> authors = service.findAll();
-        grid.setItems(authors);
+        List<Book> books = service.findAll();
+        grid.setItems(books);
         setFormVisible(false);
     }
 
@@ -71,8 +75,8 @@ public class AuthorView extends VerticalLayout implements View {
             setFormVisible(false);
         } else {
             delete.setEnabled(true);
-            author = grid.asSingleSelect().getValue();
-            binder.setBean(author);
+            book = grid.asSingleSelect().getValue();
+            binder.setBean(book);
             setFormVisible(true);
         }
     }
@@ -80,17 +84,20 @@ public class AuthorView extends VerticalLayout implements View {
     private void insertForm() {
         addOrUpdateFlag = false;
 
-        firstName.clear();
-        lastName.clear();
-        patronymic.clear();
+        title.clear();
+        bookAuthor.clear();
+        bookGenre.clear();
+        publisher.clear();
+        year.clear();
+        city.clear();
 
         if(!grid.asSingleSelect().isEmpty()){
             grid.select(null);
         }
         setFormVisible(true);
 
-        author = new Author(firstName.getValue(), lastName.getValue(), patronymic.getValue());
-        binder.setBean(author);
+        book = new Book(title.getValue(), Integer.parseInt(bookAuthor.getValue()), Integer.parseInt(bookGenre.getValue()), publisher.getValue(), Integer.parseInt(year.getValue()), city.getValue());
+        binder.setBean(book);
     }
 
     private void deleteForm() {
@@ -98,9 +105,9 @@ public class AuthorView extends VerticalLayout implements View {
             delete.setEnabled(false);
         }
         else{
-            author = grid.asSingleSelect().getValue();
-            binder.setBean(author);
-            service.delete(author);
+            book = grid.asSingleSelect().getValue();
+            binder.setBean(book);
+            service.delete(book);
         }
         updateGrid();
     }
@@ -110,9 +117,13 @@ public class AuthorView extends VerticalLayout implements View {
             grid.deselectAll();
             delete.setEnabled(false);
         }
-        firstName.setVisible(visible);
-        lastName.setVisible(visible);
-        patronymic.setVisible(visible);
+        title.setVisible(visible);
+        bookAuthor.setVisible(visible);
+        bookGenre.setVisible(visible);
+        publisher.setVisible(visible);
+        year.setVisible(visible);
+        city.setVisible(visible);
+
         save.setVisible(visible);
         cancel.setVisible(visible);
     }

@@ -1,9 +1,12 @@
-package com.example.demo.Entities.Author;
+package com.example.demo.Entities.Genre;
 
+import com.example.demo.Entities.Author.Author;
+import com.example.demo.Entities.Author.AuthorService;
 import com.vaadin.data.Binder;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.spring.annotation.SpringView;
+import com.vaadin.spring.annotation.ViewScope;
 import com.vaadin.ui.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -12,26 +15,24 @@ import java.util.List;
 
 
 @SpringView
-public class AuthorView extends VerticalLayout implements View {
+public class GenreView extends VerticalLayout implements View {
 
     private boolean addOrUpdateFlag = false;
 
     @Autowired
-    private AuthorService service;
+    private GenreService service;
 
-    private Author author;
-    private Binder<Author> binder = new Binder<>(Author.class);
+    private Genre genre;
+    private Binder<Genre> binder = new Binder<>(Genre.class);
 
-    private Grid<Author> grid = new Grid(Author.class);
+    private Grid<Genre> grid = new Grid(Genre.class);
 
-    private TextField firstName = new TextField("Имя");
-    private TextField lastName = new TextField("Фамилия");
-    private TextField patronymic = new TextField("Отчество");
+    private TextField title = new TextField("Название");
 
     private Button add = new Button("Добавить", e -> insertForm());
     private Button delete = new Button("Удалить", e-> deleteForm());
 
-    private Button save = new Button("OK", e -> saveAuthor());
+    private Button save = new Button("OK", e -> saveGenre());
     private Button cancel = new Button("Отменить", e-> setFormVisible(false));
 
     @Override
@@ -48,19 +49,19 @@ public class AuthorView extends VerticalLayout implements View {
 
         delete.setEnabled(false);
         grid.addSelectionListener(e -> updateForm());
-        grid.setColumns("firstName", "lastName", "patronymic");
+        grid.setColumns("title");
 
         binder.bindInstanceFields(this);
 
         vl.addComponents(add,delete);
         hl1.addComponents(grid,vl);
         hl2.addComponents(save,cancel);
-        addComponents(hl1, firstName, lastName, patronymic, hl2);
+        addComponents(hl1, title, hl2);
     }
 
     private void updateGrid() {
-        List<Author> authors = service.findAll();
-        grid.setItems(authors);
+        List<Genre> genres = service.findAll();
+        grid.setItems(genres);
         setFormVisible(false);
     }
 
@@ -71,8 +72,8 @@ public class AuthorView extends VerticalLayout implements View {
             setFormVisible(false);
         } else {
             delete.setEnabled(true);
-            author = grid.asSingleSelect().getValue();
-            binder.setBean(author);
+            genre = grid.asSingleSelect().getValue();
+            binder.setBean(genre);
             setFormVisible(true);
         }
     }
@@ -80,17 +81,15 @@ public class AuthorView extends VerticalLayout implements View {
     private void insertForm() {
         addOrUpdateFlag = false;
 
-        firstName.clear();
-        lastName.clear();
-        patronymic.clear();
+        title.clear();
 
         if(!grid.asSingleSelect().isEmpty()){
             grid.select(null);
         }
         setFormVisible(true);
 
-        author = new Author(firstName.getValue(), lastName.getValue(), patronymic.getValue());
-        binder.setBean(author);
+        genre = new Genre(title.getValue());
+        binder.setBean(genre);
     }
 
     private void deleteForm() {
@@ -98,9 +97,9 @@ public class AuthorView extends VerticalLayout implements View {
             delete.setEnabled(false);
         }
         else{
-            author = grid.asSingleSelect().getValue();
-            binder.setBean(author);
-            service.delete(author);
+            genre = grid.asSingleSelect().getValue();
+            binder.setBean(genre);
+            service.delete(genre);
         }
         updateGrid();
     }
@@ -110,19 +109,17 @@ public class AuthorView extends VerticalLayout implements View {
             grid.deselectAll();
             delete.setEnabled(false);
         }
-        firstName.setVisible(visible);
-        lastName.setVisible(visible);
-        patronymic.setVisible(visible);
+        title.setVisible(visible);
         save.setVisible(visible);
         cancel.setVisible(visible);
     }
 
-    private void saveAuthor() {
+    private void saveGenre() {
         if(addOrUpdateFlag){
-            service.update(author);
+            service.update(genre);
         }
         else {
-            service.insert(author);
+            service.insert(genre);
         }
         updateGrid();
     }
