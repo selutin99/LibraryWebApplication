@@ -33,7 +33,7 @@ public class BookView extends VerticalLayout implements View {
     private TextField title = new TextField("Название");
     private TextField bookAuthor = new TextField("Автор книги");
     private TextField bookGenre = new TextField("Жанр книги");
-    private TextField publisher = new TextField("Издательство");
+    private NativeSelect<String> publisher = new NativeSelect<>("Издательство");
     private TextField year = new TextField("Год");
     private TextField city = new TextField("Город");
 
@@ -68,7 +68,11 @@ public class BookView extends VerticalLayout implements View {
 
         hlForButton.addComponents(vlForButton1,vlForButton2);
 
+        publisher.setItems("Москва","Питер","Oreily");
+        publisher.setEmptySelectionAllowed(false);
+
         group.setItems("По имени", "По автору", "По издательству");
+        group.addStyleName(ValoTheme.OPTIONGROUP_HORIZONTAL);
         group.setSelectedItem("По имени");
         group.addValueChangeListener(e-> {
             switch (e.getValue()) {
@@ -184,6 +188,7 @@ public class BookView extends VerticalLayout implements View {
             grid.select(null);
         }
         setFormVisible(true);
+        publisher.setValue("Москва");
 
         book = new Book(title.getValue(), bookAuthor.getValue(), bookGenre.getValue(), publisher.getValue(), year.getValue(), city.getValue());
         binder.setBean(book);
@@ -218,16 +223,6 @@ public class BookView extends VerticalLayout implements View {
     }
 
     private void saveAuthor() {
-        switch (publisher.getValue()){
-            case "Москва":
-                break;
-            case "Питер":
-                break;
-            case "Oreily":
-                break;
-            default:
-                return;
-        }
         if(addOrUpdateFlag){
             service.update(book);
         }
