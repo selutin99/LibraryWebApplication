@@ -76,8 +76,8 @@ public class BookService {
     public void update(Book book) {
         jdbcTemplate.update("UPDATE book SET " +
                         "title=?, bookAuthor=?, bookGenre=?, publisher=?, year=?, city=?  " +
-                        "WHERE idAuthor=?",
-                book.getTitle(), book.getBookAuthor(), book.getBookGenre(), book.getPublisher(), book.getYear(), book.getCity());
+                        "WHERE idBook=?",
+                book.getTitle(), book.getBookAuthor(), book.getBookGenre(), book.getPublisher(), book.getYear(), book.getCity(), book.getId());
     }
 
     public void insert(Book book) {

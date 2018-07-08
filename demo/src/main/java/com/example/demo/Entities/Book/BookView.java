@@ -239,11 +239,24 @@ public class BookView extends VerticalLayout implements View {
             Notification.show("Введите не пустое значение!");
             return;
         }
+
         else {
             if (addOrUpdateFlag) {
-                service.update(book);
+                try {
+                    service.update(book);
+                }
+                catch(Exception e){
+                    Notification.show("Обновление не удалось. Проверьте введённые данные.");
+                    return;
+                }
             } else {
-                service.insert(book);
+                try {
+                    service.insert(book);
+                }
+                catch(Exception e){
+                    Notification.show("Добавление не удалось. Проверьте введённые данные.");
+                    return;
+                }
             }
             updateGrid();
         }
