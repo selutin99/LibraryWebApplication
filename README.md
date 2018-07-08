@@ -1,4 +1,7 @@
 # LibraryWebApplication
+*UI: Vaadin 8
+*Доступ к данным: JDBC
+*Сервер: MySQL 5.7
 
 Настройка и запуск
 
