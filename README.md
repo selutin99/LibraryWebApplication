@@ -1,8 +1,9 @@
 # LibraryWebApplication
-*UI: Vaadin 8
-*Доступ к данным: JDBC
-*Сервер: MySQL 5.7
-
+<ul>
+<li>UI: Vaadin 8</li>
+<li>Доступ к данным: JDBC</li>
+<li>Сервер: MySQL 5.7</li>
+</ul>  
 Настройка и запуск
 
 Импортировать проект (как проект maven)
