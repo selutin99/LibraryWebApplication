@@ -223,12 +223,29 @@ public class BookView extends VerticalLayout implements View {
     }
 
     private void saveAuthor() {
-        if(addOrUpdateFlag){
-            service.update(book);
+        String yearValidate = year.getValue();
+        try{
+            int yyyy = Integer.parseInt(yearValidate);
+            if(yyyy<=999 || yyyy>=9999){
+                Notification.show("Неверное значение!");
+                return;
+            }
+        }
+        catch (NumberFormatException e){
+            Notification.show("Неверное значение!");
+            return;
+        }
+        if(title.getValue().equals("") || city.getValue().equals("")){
+            Notification.show("Введите не пустое значение!");
+            return;
         }
         else {
-            service.insert(book);
+            if (addOrUpdateFlag) {
+                service.update(book);
+            } else {
+                service.insert(book);
+            }
+            updateGrid();
         }
-        updateGrid();
     }
 }

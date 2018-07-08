@@ -85,7 +85,12 @@ public class AuthorView extends VerticalLayout implements View {
         patronymic.clear();
 
         if(!grid.asSingleSelect().isEmpty()){
-            grid.select(null);
+            try {
+                grid.select(null);
+            }
+            catch(NullPointerException e){
+
+            }
         }
         setFormVisible(true);
 
@@ -100,14 +105,26 @@ public class AuthorView extends VerticalLayout implements View {
         else{
             author = grid.asSingleSelect().getValue();
             binder.setBean(author);
-            service.delete(author);
+            try {
+                service.delete(author);
+            }
+            catch (Exception e){
+                Notification.show("Удаление невозможно! Запись используется.");
+            }
         }
         updateGrid();
     }
 
     private void setFormVisible(boolean visible) {
         if(!visible){
-            grid.deselectAll();
+            if(!grid.asSingleSelect().isEmpty()){
+                try {
+                    grid.select(null);
+                }
+                catch(NullPointerException e){
+
+                }
+            }
             delete.setEnabled(false);
         }
         firstName.setVisible(visible);
@@ -118,6 +135,10 @@ public class AuthorView extends VerticalLayout implements View {
     }
 
     private void saveAuthor() {
+        if(firstName.getValue().equals("") || lastName.getValue().equals("")){
+            Notification.show("Введите не пустое значение!");
+            return;
+        }
         if(addOrUpdateFlag){
             service.update(author);
         }

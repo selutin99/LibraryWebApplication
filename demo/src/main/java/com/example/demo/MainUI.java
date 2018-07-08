@@ -3,6 +3,7 @@ package com.example.demo;
 import com.example.demo.Entities.Author.AuthorView;
 import com.example.demo.Entities.Book.BookView;
 import com.example.demo.Entities.Genre.GenreView;
+import com.example.demo.Entities.Statistic.StatisticView;
 import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.server.VaadinRequest;
@@ -43,6 +44,7 @@ public class MainUI extends UI {
         m.addComponent(createNavButton("Список авторов", AuthorView.class));
         m.addComponent(createNavButton("Список жанров", GenreView.class));
         m.addComponent(createNavButton("Список книг", BookView.class));
+        m.addComponent(createNavButton("Статистика", StatisticView.class));
         return m;
     }
 

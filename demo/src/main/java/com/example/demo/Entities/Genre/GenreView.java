@@ -84,7 +84,12 @@ public class GenreView extends VerticalLayout implements View {
         title.clear();
 
         if(!grid.asSingleSelect().isEmpty()){
-            grid.select(null);
+            try {
+                grid.select(null);
+            }
+            catch(NullPointerException e){
+
+            }
         }
         setFormVisible(true);
 
@@ -99,14 +104,26 @@ public class GenreView extends VerticalLayout implements View {
         else{
             genre = grid.asSingleSelect().getValue();
             binder.setBean(genre);
-            service.delete(genre);
+            try {
+                service.delete(genre);
+            }
+            catch (Exception e){
+                Notification.show("Удаление невозможно! Запись используется.");
+            }
         }
         updateGrid();
     }
 
     private void setFormVisible(boolean visible) {
         if(!visible){
-            grid.deselectAll();
+            if(!grid.asSingleSelect().isEmpty()){
+                try {
+                    grid.select(null);
+                }
+                catch(NullPointerException e){
+
+                }
+            }
             delete.setEnabled(false);
         }
         title.setVisible(visible);
@@ -115,6 +132,10 @@ public class GenreView extends VerticalLayout implements View {
     }
 
     private void saveGenre() {
+        if(title.getValue().equals("")){
+            Notification.show("Введите не пустое значение!");
+            return;
+        }
         if(addOrUpdateFlag){
             service.update(genre);
         }
