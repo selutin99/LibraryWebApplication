@@ -3,26 +3,26 @@ package com.example.demo.Entities.Book;
 public class Book {
     private Long id;
 
-    private String title;
-    private String bookAuthor, bookGenre;
+    private String name;
+    private String lastName, title;
     private String publisher;
     private String year;
     private String city;
 
-    public Book(Long id, String title, String bookAuthor, String bookGenre, String publisher, String year, String city) {
+    public Book(Long id, String name, String lastName, String title, String publisher, String year, String city) {
         this.id = id;
+        this.name = name;
+        this.lastName = lastName;
         this.title = title;
-        this.bookAuthor = bookAuthor;
-        this.bookGenre = bookGenre;
         this.publisher = publisher;
         this.year = year;
         this.city = city;
     }
 
-    public Book(String title, String bookAuthor, String bookGenre, String publisher, String year, String city) {
+    public Book(String name, String lastName, String title, String publisher, String year, String city) {
+        this.name = name;
+        this.lastName = lastName;
         this.title = title;
-        this.bookAuthor = bookAuthor;
-        this.bookGenre = bookGenre;
         this.publisher = publisher;
         this.year = year;
         this.city = city;
@@ -35,23 +35,23 @@ public class Book {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) { this.name = name; }
+
+    public String getLastName() {
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     public String getTitle() {
         return title;
     }
-    public void setTitle(String title) { this.title = title; }
-
-    public String getBookAuthor() {
-        return bookAuthor;
-    }
-    public void setBookAuthor(String bookAuthor) {
-        this.bookAuthor = bookAuthor;
-    }
-
-    public String getBookGenre() {
-        return bookGenre;
-    }
-    public void setBookGenre(String bookGenre) {
-        this.bookGenre = bookGenre;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getPublisher() {

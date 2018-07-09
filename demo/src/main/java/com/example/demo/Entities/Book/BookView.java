@@ -1,7 +1,5 @@
 package com.example.demo.Entities.Book;
 
-import com.example.demo.Entities.Author.Author;
-import com.example.demo.Entities.Author.AuthorService;
 import com.vaadin.data.Binder;
 import com.vaadin.icons.VaadinIcons;
 import com.vaadin.navigator.View;
@@ -10,9 +8,7 @@ import com.vaadin.shared.ui.ValueChangeMode;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import javafx.scene.control.RadioButton;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -30,9 +26,9 @@ public class BookView extends VerticalLayout implements View {
 
     private Grid<Book> grid = new Grid(Book.class);
 
-    private TextField title = new TextField("Название");
-    private TextField bookAuthor = new TextField("Автор книги");
-    private TextField bookGenre = new TextField("Жанр книги");
+    private TextField name = new TextField("Название");
+    private TextField lastName = new TextField("Автор книги");
+    private TextField title = new TextField("Жанр книги");
     private NativeSelect<String> publisher = new NativeSelect<>("Издательство");
     private TextField year = new TextField("Год");
     private TextField city = new TextField("Город");
@@ -63,7 +59,7 @@ public class BookView extends VerticalLayout implements View {
         VerticalLayout vlForButton2 = new VerticalLayout();
         HorizontalLayout hlForButton =  new HorizontalLayout();
 
-        vlForButton1.addComponents(title,bookAuthor,bookGenre);
+        vlForButton1.addComponents(name, lastName,title);
         vlForButton2.addComponents(publisher,year,city);
 
         hlForButton.addComponents(vlForButton1,vlForButton2);
@@ -104,7 +100,7 @@ public class BookView extends VerticalLayout implements View {
         clearFilterTextBtn.addClickListener(e -> filter.clear());
 
         grid.addSelectionListener(e -> updateForm());
-        grid.setColumns("title", "bookAuthor", "bookGenre", "publisher", "year", "city");
+        grid.setColumns("name", "lastName", "title", "publisher", "year", "city");
 
         binder.bindInstanceFields(this);
 
@@ -177,9 +173,9 @@ public class BookView extends VerticalLayout implements View {
     private void insertForm() {
         addOrUpdateFlag = false;
 
+        name.clear();
+        lastName.clear();
         title.clear();
-        bookAuthor.clear();
-        bookGenre.clear();
         publisher.clear();
         year.clear();
         city.clear();
@@ -190,7 +186,7 @@ public class BookView extends VerticalLayout implements View {
         setFormVisible(true);
         publisher.setValue("Москва");
 
-        book = new Book(title.getValue(), bookAuthor.getValue(), bookGenre.getValue(), publisher.getValue(), year.getValue(), city.getValue());
+        book = new Book(name.getValue(), lastName.getValue(), title.getValue(), publisher.getValue(), year.getValue(), city.getValue());
         binder.setBean(book);
     }
 
@@ -211,9 +207,9 @@ public class BookView extends VerticalLayout implements View {
             grid.deselectAll();
             delete.setEnabled(false);
         }
+        name.setVisible(visible);
+        lastName.setVisible(visible);
         title.setVisible(visible);
-        bookAuthor.setVisible(visible);
-        bookGenre.setVisible(visible);
         publisher.setVisible(visible);
         year.setVisible(visible);
         city.setVisible(visible);
@@ -223,6 +219,7 @@ public class BookView extends VerticalLayout implements View {
     }
 
     private void saveAuthor() {
+        String idAuthor="", idGenre="";
         String yearValidate = year.getValue();
         try{
             int yyyy = Integer.parseInt(yearValidate);
@@ -235,15 +232,24 @@ public class BookView extends VerticalLayout implements View {
             Notification.show("Неверное значение!");
             return;
         }
-        if(title.getValue().equals("") || city.getValue().equals("")){
+        if(name.getValue().equals("") || city.getValue().equals("")){
             Notification.show("Введите не пустое значение!");
             return;
         }
 
         else {
+            try {
+                idAuthor = service.getAuthorID(lastName.getValue());
+                idGenre = service.getGenreID(title.getValue());
+            }
+            catch (Exception e){
+                Notification.show("Проверьте введённые данные.");
+                return;
+            }
+
             if (addOrUpdateFlag) {
                 try {
-                    service.update(book);
+                    service.update(book, idAuthor, idGenre);
                 }
                 catch(Exception e){
                     Notification.show("Обновление не удалось. Проверьте введённые данные.");
@@ -251,7 +257,7 @@ public class BookView extends VerticalLayout implements View {
                 }
             } else {
                 try {
-                    service.insert(book);
+                    service.insert(book, idAuthor, idGenre);
                 }
                 catch(Exception e){
                     Notification.show("Добавление не удалось. Проверьте введённые данные.");
