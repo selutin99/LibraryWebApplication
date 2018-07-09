@@ -17,9 +17,7 @@ public class MainViewDisplay extends Panel implements ViewDisplay {
 
     @Override
     public void showView(View view) {
-        // Assuming View's are components, which is often the case
         setContent((Component) view);
     }
-
 
 }

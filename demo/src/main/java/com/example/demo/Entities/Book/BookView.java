@@ -17,27 +17,30 @@ import java.util.List;
 public class BookView extends VerticalLayout implements View {
 
     private boolean addOrUpdateFlag = false;
+    private Publishers publishers;
 
     @Autowired
     private BookService service;
-
     private Book book;
     private Binder<Book> binder = new Binder<>(Book.class);
-
     private Grid<Book> grid = new Grid(Book.class);
+
 
     private TextField name = new TextField("Название");
     private TextField lastName = new TextField("Автор книги");
     private TextField title = new TextField("Жанр книги");
+
     private NativeSelect<String> publisher = new NativeSelect<>("Издательство");
     private TextField year = new TextField("Год");
     private TextField city = new TextField("Город");
+
 
     private Button add = new Button("Добавить", e -> insertForm());
     private Button delete = new Button("Удалить", e-> deleteForm());
 
     private Button save = new Button("OK", e -> saveAuthor());
     private Button cancel = new Button("Отменить", e-> setFormVisible(false));
+
 
     private TextField filter = new TextField();
     private Button clearFilterTextBtn = new Button(VaadinIcons.CLOSE);
@@ -64,7 +67,7 @@ public class BookView extends VerticalLayout implements View {
 
         hlForButton.addComponents(vlForButton1,vlForButton2);
 
-        publisher.setItems("Москва","Питер","Oreily");
+        publisher.setItems(String.valueOf(publishers.Москва), String.valueOf(publishers.Питер),String.valueOf(publishers.Oreily));
         publisher.setEmptySelectionAllowed(false);
 
         group.setItems("По имени", "По автору", "По издательству");
@@ -73,16 +76,16 @@ public class BookView extends VerticalLayout implements View {
         group.addValueChangeListener(e-> {
             switch (e.getValue()) {
                 case "По имени":
-                    chooseFilter(1);
+                    chooseFilter("По имени");
                     break;
                 case "По автору":
-                    chooseFilter(2);
+                    chooseFilter("По автору");
                     break;
                 case "По издательству":
-                    chooseFilter(3);
+                    chooseFilter("По издательству");
                     break;
                 default:
-                    chooseFilter(1);
+                    chooseFilter("По имени");
             }
         });
         filter.setPlaceholder("Фильтрация записей");
@@ -141,15 +144,15 @@ public class BookView extends VerticalLayout implements View {
         setFormVisible(false);
     }
 
-    private void chooseFilter(int id){
+    private void chooseFilter(String id){
         switch (id){
-            case 1:
+            case "По имени":
                 filter.addValueChangeListener(e->updateGridFilterName());
                 break;
-            case 2:
+            case "По автору":
                 filter.addValueChangeListener(e->updateGridFilterAuthor());
                 break;
-            case 3:
+            case "По издательству":
                 filter.addValueChangeListener(e->updateGridFilterPublisher());
                 break;
             default:
@@ -237,7 +240,6 @@ public class BookView extends VerticalLayout implements View {
             Notification.show("Введите не пустое значение!");
             return;
         }
-
         else {
             try {
                 idAuthor = service.getAuthorID(lastName.getValue());
@@ -256,7 +258,8 @@ public class BookView extends VerticalLayout implements View {
                     Notification.show("Обновление не удалось. Проверьте введённые данные.");
                     return;
                 }
-            } else {
+            }
+            else {
                 try {
                     service.insert(book, idAuthor, idGenre);
                 }
