@@ -8,3 +8,6 @@
 
 Для импорта базы можно использовать дамп из директории /FOR_INSTALL/dumpDatabase
 или отдельный sql-файл /FOR_INSTALL/library.sql
+
+Конфигурационный файл:
+/demo/src/main/resources/application.properties
