@@ -1,7 +1,7 @@
 package com.example.demo.Entities.Book;
 
 public class Book {
-    private Long id;
+    private int id;
 
     private String name;
     private String lastName, title;
@@ -9,7 +9,7 @@ public class Book {
     private String year;
     private String city;
 
-    public Book(Long id, String name, String lastName, String title, String publisher, String year, String city) {
+    public Book(int id, String name, String lastName, String title, String publisher, String year, String city) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -28,10 +28,10 @@ public class Book {
         this.city = city;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

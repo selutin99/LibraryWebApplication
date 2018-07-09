@@ -17,7 +17,6 @@ import java.util.List;
 public class BookView extends VerticalLayout implements View {
 
     private boolean addOrUpdateFlag = false;
-    private Publishers publishers;
 
     @Autowired
     private BookService service;
@@ -67,7 +66,8 @@ public class BookView extends VerticalLayout implements View {
 
         hlForButton.addComponents(vlForButton1,vlForButton2);
 
-        publisher.setItems(String.valueOf(publishers.Москва), String.valueOf(publishers.Питер),String.valueOf(publishers.Oreily));
+        //Значения из перечисления Publishers
+        publisher.setItems(String.valueOf(Publishers.Москва), String.valueOf(Publishers.Питер),String.valueOf(Publishers.Oreily));
         publisher.setEmptySelectionAllowed(false);
 
         group.setItems("По имени", "По автору", "По издательству");

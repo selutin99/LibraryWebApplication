@@ -17,7 +17,7 @@ public class BookService {
     public List<Book> findAll() {
         return jdbcTemplate.query("SELECT idBook, name, lastName, title, publisher, year, city FROM book INNER JOIN author ON author.idAuthor = book.bookAuthor INNER JOIN genre ON genre.idGenre = book.bookGenre",
                 (rs, rowNum) -> new Book(
-                        rs.getLong("idBook"),
+                        rs.getInt("idBook"),
                         rs.getString("name"),
                         rs.getString("lastName"),
                         rs.getString("title"),
@@ -31,7 +31,7 @@ public class BookService {
     public List<Book> findAllByName(String value) {
         return jdbcTemplate.query("SELECT idBook, name, lastName, title, publisher, year, city FROM book INNER JOIN author ON author.idAuthor = book.bookAuthor INNER JOIN genre ON genre.idGenre = book.bookGenre WHERE name LIKE '%"+value+"%'",
                 (rs, rowNum) -> new Book(
-                        rs.getLong("idBook"),
+                        rs.getInt("idBook"),
                         rs.getString("name"),
                         rs.getString("lastName"),
                         rs.getString("title"),
@@ -45,7 +45,7 @@ public class BookService {
     public List<Book> findAllByPublisher(String value) {
         return jdbcTemplate.query("SELECT idBook, name, lastName, title, publisher, year, city FROM book INNER JOIN author ON author.idAuthor = book.bookAuthor INNER JOIN genre ON genre.idGenre = book.bookGenre WHERE publisher LIKE '%"+value+"%'",
                 (rs, rowNum) -> new Book(
-                        rs.getLong("idBook"),
+                        rs.getInt("idBook"),
                         rs.getString("name"),
                         rs.getString("lastName"),
                         rs.getString("title"),
@@ -59,7 +59,7 @@ public class BookService {
     public List<Book> findAllByAuthor(String value) {
         return jdbcTemplate.query("SELECT idBook, name, lastName, title, publisher, year, city FROM book INNER JOIN author ON author.idAuthor = book.bookAuthor INNER JOIN genre ON genre.idGenre = book.bookGenre WHERE lastName LIKE '%"+value+"%'",
                 (rs, rowNum) -> new Book(
-                        rs.getLong("idBook"),
+                        rs.getInt("idBook"),
                         rs.getString("name"),
                         rs.getString("lastName"),
                         rs.getString("title"),

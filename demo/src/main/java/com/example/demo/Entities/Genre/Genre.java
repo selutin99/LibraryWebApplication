@@ -1,11 +1,11 @@
 package com.example.demo.Entities.Genre;
 
 public class Genre {
-    private Long id;
+    private int id;
 
     private String title;
 
-    public Genre(Long id, String title) {
+    public Genre(int id, String title) {
         this.id = id;
         this.title = title;
     }
@@ -14,11 +14,11 @@ public class Genre {
         this.title = title;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

@@ -89,7 +89,6 @@ public class AuthorView extends VerticalLayout implements View {
                 grid.select(null);
             }
             catch(NullPointerException e){
-
             }
         }
         setFormVisible(true);

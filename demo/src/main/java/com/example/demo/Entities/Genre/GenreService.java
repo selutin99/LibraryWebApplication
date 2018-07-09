@@ -15,7 +15,7 @@ public class GenreService {
     public List<Genre> findAll() {
         return jdbcTemplate.query("SELECT idGenre, title FROM genre",
                 (rs, rowNum) -> new Genre(
-                        rs.getLong("idGenre"),
+                        rs.getInt("idGenre"),
                         rs.getString("title")
                 )
         );

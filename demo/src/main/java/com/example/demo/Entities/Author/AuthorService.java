@@ -16,7 +16,7 @@ public class AuthorService {
     public List<Author> findAll() {
         return jdbcTemplate.query("SELECT idAuthor, firstName, lastName, patronymic FROM author",
                 (rs, rowNum) -> new Author(
-                        rs.getLong("idAuthor"),
+                        rs.getInt("idAuthor"),
                         rs.getString("firstName"),
                         rs.getString("lastName"),
                         rs.getString("patronymic")
