@@ -25,7 +25,11 @@ public class AuthorService {
     }
 
     public void update(Author author) {
-        jdbcTemplate.update("UPDATE author SET firstName=?, lastName=?, patronymic=? WHERE idAuthor=?",
+        jdbcTemplate.update("UPDATE author SET " +
+                        "firstName=?, " +
+                        "lastName=?, " +
+                        "patronymic=? " +
+                        "WHERE idAuthor=?",
                 author.getFirstName(), author.getLastName(), author.getPatronymic(), author.getId());
     }
 

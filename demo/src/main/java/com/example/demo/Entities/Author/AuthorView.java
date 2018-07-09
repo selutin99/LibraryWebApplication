@@ -93,7 +93,6 @@ public class AuthorView extends VerticalLayout implements View {
             }
         }
         setFormVisible(true);
-
         author = new Author(firstName.getValue(), lastName.getValue(), patronymic.getValue());
         binder.setBean(author);
     }

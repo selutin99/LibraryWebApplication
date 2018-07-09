@@ -43,11 +43,9 @@ public class Author {
         this.lastName = lastName;
     }
 
-    public String getPatronymic() {
-        return patronymic;
-    }
+    public String getPatronymic() {return patronymic; }
 
-    public void setPatronymic(String firstName) {
+    public void setPatronymic(String patronymic) {
         this.patronymic = patronymic;
     }
 
