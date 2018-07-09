@@ -85,10 +85,10 @@ public class BookService {
     }
 
     public String getGenreID(String value){
-        return jdbcTemplate.queryForObject("SELECT idGenre FROM genre WHERE title = ?",new Object[] {value}, String.class);
+        return jdbcTemplate.queryForObject("SELECT idGenre FROM genre WHERE title = ? LIMIT 1",new Object[] {value}, String.class);
     }
 
     public String getAuthorID(String value){
-        return jdbcTemplate.queryForObject("SELECT idAuthor FROM author WHERE lastName = ?",new Object[] {value}, String.class);
+        return jdbcTemplate.queryForObject("SELECT idAuthor FROM author WHERE lastName = ? LIMIT 1",new Object[] {value}, String.class);
     }
 }

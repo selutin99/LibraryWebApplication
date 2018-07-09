@@ -167,6 +167,7 @@ public class BookView extends VerticalLayout implements View {
             book = grid.asSingleSelect().getValue();
             binder.setBean(book);
             setFormVisible(true);
+            year.setValue(year.getValue().substring(0,4));
         }
     }
 
