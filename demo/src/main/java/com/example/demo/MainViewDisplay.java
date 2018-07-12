@@ -12,6 +12,8 @@ import com.vaadin.ui.themes.ValoTheme;
 public class MainViewDisplay extends Panel implements ViewDisplay {
 
     public MainViewDisplay() {
+        addStyleName("v-scrollable");
+        setHeight("100%");
         setStyleName(ValoTheme.PANEL_BORDERLESS);
     }
 

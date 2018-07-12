@@ -30,6 +30,8 @@ public class MainUI extends UI {
 
     @Override
     protected void init(VaadinRequest request) {
+        addStyleName("v-scrollable");
+        setHeight("100%");
 
         setContent(
                 new MHorizontalLayout()

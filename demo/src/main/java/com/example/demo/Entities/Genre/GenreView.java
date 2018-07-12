@@ -56,6 +56,7 @@ public class GenreView extends VerticalLayout implements View {
         vl.addComponents(add,delete);
         hl1.addComponents(grid,vl);
         hl2.addComponents(save,cancel);
+
         addComponents(hl1, title, hl2);
     }
 
