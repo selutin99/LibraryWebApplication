@@ -5,6 +5,7 @@
 2) Для пользования установить <a href="https://www.mysql.com/products/workbench/">MySQL workbench</a> или PHPMyAdmin
 
 Для импорта базы можно использовать дамп: dump.sql
+
 Также можно использовать дампы отдельных таблиц: tables_dump/*.sql
 
 Конфигурационный файл:
